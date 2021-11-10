@@ -1,10 +1,14 @@
 'use strict'
 
+currentRound = 0;
+maxRounds = 25;
+
 function ImageObject(name, filepath) {
     this.name = name;
     this.filepath = filepath;
     this.timesShown = 0;
     this.votes = 0;
+    this.shown = 0;
     ImageObject.all.push(this);
 }
 
@@ -21,6 +25,8 @@ ImageObject.prototype.render = function (side) {
 
     const captionElem = document.getElementById(side + '-caption');
     captionElem.textContent = this.name;
+
+    this.shown += 1;
 }
 
 // functions below
@@ -45,12 +51,6 @@ function pickRandomImg() {
 
 }
 
-// render for single image, get rid of onces multiple render works
-// function renderImage(imageObject, id) {
-//     const imgElem = document.getElementById(id);
-//     imgElem.src = imageObject.filepath;
-//     imgElem.alt = imageObject.name;
-// }
 
 function renderImages() {
     //render all three images
@@ -79,7 +79,7 @@ function populatesImages() {
     new ImageObject('pet-sweep', 'images/pet-sweep.jpeg');
     new ImageObject('scissors', 'images/scissors.jpeg');
     new ImageObject('shark', 'images/shark.jpeg');
-    new ImageObject('sweep', 'images/sweep.jpeg');
+    new ImageObject('sweep', 'images/sweep.png');
     new ImageObject('tauntaun', 'images/tauntaun.jpeg');
     new ImageObject('unicorn', 'images/unicorn.jpeg');
     new ImageObject('water-can', 'images/water-can.jpeg');
@@ -90,19 +90,52 @@ function populatesImages() {
 }
 
 function addEventListeners() {
-    // lissen fo da cliks
+    // lissen for the cliks
+    const containerElem = document.getElementById('product-container');
+    containerElem.addEventListener('click', handleClicks);
 }
 
 function removeEventListeners() {
-    // yeet da event lissner
+    // yeet the event listener
+    const containerElem = document.getElementById('product-container');
+    containerElem.removeEventListener('click', handleClicks);
 
 }
 
-function handleClicks() {
-    // do sumn wit da cliks
+function handleClicks(event) {
+
+    currentRound += 1;
+    // do somethin' with the cliks
+    const targetId = event.target.id;
+
+    if(targetId === 'leftImage') {
+        ImageObject.left.votes += 1;
+    } else if (targetId === 'middleImage') {
+        ImageObject.middle.votes += 1;
+    } else if (targetId === 'rightImage') {
+        ImageObject.right.votes += 1;
+    } else {
+        alert('Choice not processed!')
+        return;
+    }
+    if (currentRound < maxRounds) {
+    pickRandomImg();
+    renderImages();
+    } else {
+        renderList();
+        removeEventListeners();
+    }
 }
 
 function renderList() {
+    const ulElem = document.getElementById(results-list);
+    for(let i = 0; i < ImageObject.all.length; i += 1) {
+        const imageInstance = ImageObject.all[i];
+        const liElem = document.createElement('li');
+        ulElem.append(liElem);
+        liElem.textContent = `${imageInstance.name} - votes: ${imageInstance.votes}, shown: ${imageInstance.shown}`;
+    }
+    document.getElementById('results').hidden = false;
 
 }
 
@@ -111,6 +144,7 @@ function start() {
     populatesImages();
     pickRandomImg();
     renderImages();
+    addEventListeners();
 
 }
 
