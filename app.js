@@ -1,7 +1,7 @@
 'use strict'
 
-currentRound = 0;
-maxRounds = 25;
+let currentRound = 0;
+let maxRounds = 25;
 
 function ImageObject(name, filepath) {
     this.name = name;
@@ -123,12 +123,13 @@ function handleClicks(event) {
     renderImages();
     } else {
         renderList();
+        // renderChart();
         removeEventListeners();
     }
 }
 
 function renderList() {
-    const ulElem = document.getElementById(results-list);
+    const ulElem = document.getElementById('results-list');
     for(let i = 0; i < ImageObject.all.length; i += 1) {
         const imageInstance = ImageObject.all[i];
         const liElem = document.createElement('li');
@@ -138,6 +139,55 @@ function renderList() {
     document.getElementById('results').hidden = false;
 
 }
+
+// function renderChart() {
+
+//     const imageNamesArray = [];
+//     const imageVotesArray = [];
+//     const imageShownArray = [];
+
+//     for (let i = 0; i , ImageObject.all.length; i += 1) {
+//         const image = ImageObject.all[i];
+
+//         const singleImageName = ImageObject.name;
+//         imageNamesArray.push(singleImageName);
+
+//         const singleImageVote = ImageObject.votes;
+//         imageVotesArray.push(singleImageVote);
+
+//         const singleShownImage = ImageObject.shown;
+//         imageShownArray.push(singleShownImage);
+//     }
+//     //might need to change id to results-chart-section
+//     const ctx = document.getElementById('results-chart').getContext('2d');
+//     const imageChart = new Chart(ctx, {
+//         type: 'bar',
+
+//         data: {
+//             labels: imageNamesArray,
+//             datasets: [{
+//                 label: 'Image Votes',
+//                 backgroundColor: '#2a2a28',
+//                 borderColor: '#353831',
+//                 data : imageVotesArray,
+
+//                 label: 'Image Shown',
+//                 backgroundColor: '#2a2a28',
+//                 borderColor: '#353831',
+//                 data : imageShownArray,
+//             }]
+//         },
+//         options: {
+//             scales: {
+//                 yAxes: [{
+//                     ticks: {
+//                         beginAtZero: true
+//                     }
+//                 }]
+//             }
+//         }
+//     })
+// }
 
 function start() {
     //all systems go mfers
