@@ -63,6 +63,28 @@ function renderImages() {
 }
 
 function populatesImages() {
+    const storedImageJSON = localStorage.getItem('images');
+
+    if(storedImageJSON) {
+        recreateImages(storedImageJSON);
+    } else {
+        populateNewImages();
+    }
+}
+
+function recreateImages(json) {
+
+    const rawImages = JSON.parse(json);
+
+    for(let i = 0; i < rawImages.length; i += 1) {
+        const rawImage = rawImages[i];
+        const imageInstance = new ImageObject(rawImage.imgName, rawImage.filepath);
+        imageInstance.votes = rawImage.votes;
+        imageInstance.shown = rawImage.shown;
+    }
+}
+
+function populateNewImages() {
 
     //instantiates all img instances
     new ImageObject('bag', 'images/bag.jpeg');
@@ -102,8 +124,8 @@ function removeEventListeners() {
 }
 
 function handleClicks(event) {
-
-    currentRound += 1;
+    
+    
     // do somethin' with the cliks
     const targetId = event.target.id;
 
@@ -117,14 +139,33 @@ function handleClicks(event) {
         alert('Choice not processed!')
         return;
     }
-    if (currentRound < maxRounds) {
-    pickRandomImg();
-    renderImages();
+    currentRound += 1;
+    if (currentRound === maxRounds) {
+        completeVote();
+        localStorage.clear();
+    // pickRandomImg();
+    // renderImages();
     } else {
-        renderList();
-        renderChart();
-        removeEventListeners();
+        pickRandomImg();
+        renderImages();
+        
+        // renderList();
+        // renderChart();
+        // removeEventListeners();
+        
     }
+}
+
+function completeVote() {
+
+    document.getElementById('results').hidden = false;
+
+    removeEventListeners();
+    renderList();
+    renderChart();
+    
+
+    localStorage.setItem('images', JSON.stringify(ImageObject.all));
 }
 
 function renderList() {
@@ -169,7 +210,7 @@ function renderChart() {
                 backgroundColor: '#2a2a28',
                 borderColor: '#353831',
                 data : imageVotesArray,
-
+            },{
                 label: 'Image Shown',
                 backgroundColor: '#2a2a28',
                 borderColor: '#353831',
