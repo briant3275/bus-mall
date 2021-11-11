@@ -3,8 +3,8 @@
 let currentRound = 0;
 let maxRounds = 25;
 
-function ImageObject(name, filepath) {
-    this.name = name;
+function ImageObject(imgName, filepath) {
+    this.imgName = imgName;
     this.filepath = filepath;
     this.timesShown = 0;
     this.votes = 0;
@@ -21,10 +21,10 @@ ImageObject.right = null;
 ImageObject.prototype.render = function (side) {
     const imgElem = document.getElementById(side + 'Image');
     imgElem.src = this.filepath;
-    imgElem.alt = this.name;
+    imgElem.alt = this.imgName;
 
     const captionElem = document.getElementById(side + '-caption');
-    captionElem.textContent = this.name;
+    captionElem.textContent = this.imgName;
 
     this.shown += 1;
 }
@@ -37,20 +37,21 @@ function getRandomImg() {
 }
 
 function pickRandomImg() {
-    // let randomImageNum = Math.round(Math.random() * 18);
-    ImageObject.left = getRandomImg();
+    const oldLeft = ImageObject.left;
+    const oldMiddle = ImageObject.middle;
+    const oldRight = ImageObject.right;
 
     do {
+    ImageObject.left = getRandomImg();
+    } while (ImageObject.left === oldLeft || ImageObject.left === oldMiddle || ImageObject.left === oldRight)
+    do {
         ImageObject.middle =  getRandomImg();
-    } while(ImageObject.left === ImageObject.middle);
+    } while(ImageObject.left === ImageObject.middle || ImageObject.middle === oldLeft || ImageObject.middle === oldMiddle || ImageObject.middle === oldRight);
 
     do {
         ImageObject.right = getRandomImg();
-    } while((ImageObject.left === ImageObject.right) || (ImageObject.middle === ImageObject.right));
-
-
+    } while((ImageObject.left === ImageObject.right) || (ImageObject.middle === ImageObject.right || ImageObject.right === oldLeft || ImageObject.right === oldMiddle || ImageObject.right === oldRight));
 }
-
 
 function renderImages() {
     //render all three images
@@ -59,7 +60,6 @@ function renderImages() {
     ImageObject.right.render('right');
 
     // array of random unique indices
-
 }
 
 function populatesImages() {
@@ -99,7 +99,6 @@ function removeEventListeners() {
     // yeet the event listener
     const containerElem = document.getElementById('product-container');
     containerElem.removeEventListener('click', handleClicks);
-
 }
 
 function handleClicks(event) {
@@ -123,7 +122,7 @@ function handleClicks(event) {
     renderImages();
     } else {
         renderList();
-        // renderChart();
+        renderChart();
         removeEventListeners();
     }
 }
@@ -134,60 +133,61 @@ function renderList() {
         const imageInstance = ImageObject.all[i];
         const liElem = document.createElement('li');
         ulElem.append(liElem);
-        liElem.textContent = `${imageInstance.name} - votes: ${imageInstance.votes}, shown: ${imageInstance.shown}`;
+        liElem.textContent = `${imageInstance.imgName} - votes: ${imageInstance.votes}, shown: ${imageInstance.shown}`;
     }
     document.getElementById('results').hidden = false;
 
 }
 
-// function renderChart() {
+function renderChart() {
 
-//     const imageNamesArray = [];
-//     const imageVotesArray = [];
-//     const imageShownArray = [];
+    const imageNamesArray = [];
+    const imageVotesArray = [];
+    const imageShownArray = [];
 
-//     for (let i = 0; i , ImageObject.all.length; i += 1) {
-//         const image = ImageObject.all[i];
+    for (let i = 0; i < ImageObject.all.length; i += 1) {
+        const image = ImageObject.all[i];
 
-//         const singleImageName = ImageObject.name;
-//         imageNamesArray.push(singleImageName);
+        const singleImageName = image.imgName;
+        imageNamesArray.push(singleImageName);
 
-//         const singleImageVote = ImageObject.votes;
-//         imageVotesArray.push(singleImageVote);
+        const singleImageVote = image.votes;
+        imageVotesArray.push(singleImageVote);
 
-//         const singleShownImage = ImageObject.shown;
-//         imageShownArray.push(singleShownImage);
-//     }
-//     //might need to change id to results-chart-section
-//     const ctx = document.getElementById('results-chart').getContext('2d');
-//     const imageChart = new Chart(ctx, {
-//         type: 'bar',
+        const singleShownImage = image.shown;
+        imageShownArray.push(singleShownImage);
+    }
+    
+    const ctx = document.getElementById('results-chart').getContext('2d');
+    const imageChart = new Chart(ctx, {
+        type: 'bar',
 
-//         data: {
-//             labels: imageNamesArray,
-//             datasets: [{
-//                 label: 'Image Votes',
-//                 backgroundColor: '#2a2a28',
-//                 borderColor: '#353831',
-//                 data : imageVotesArray,
+        data: {
+            labels: imageNamesArray,
+            datasets: [{
+                label: 'Image Votes',
+                backgroundColor: '#2a2a28',
+                borderColor: '#353831',
+                data : imageVotesArray,
 
-//                 label: 'Image Shown',
-//                 backgroundColor: '#2a2a28',
-//                 borderColor: '#353831',
-//                 data : imageShownArray,
-//             }]
-//         },
-//         options: {
-//             scales: {
-//                 yAxes: [{
-//                     ticks: {
-//                         beginAtZero: true
-//                     }
-//                 }]
-//             }
-//         }
-//     })
-// }
+                label: 'Image Shown',
+                backgroundColor: '#2a2a28',
+                borderColor: '#353831',
+                data : imageShownArray,
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
+    })
+    document.getElementById('results-chart-section').hidden = false;
+}
 
 function start() {
     //all systems go mfers
