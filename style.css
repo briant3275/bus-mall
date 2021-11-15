@@ -4,6 +4,22 @@
 
 body {
     height: 90vh;
+    font-family: 'Nunito', sans-serif;
+}
+
+header {
+    font-size: 40pt;
+    color: #2a2a28;
+    text-shadow: 3px 3px 4px #353831;
+    padding-bottom: 1rem;
+    border-bottom: 4px solid #83781b;
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 3rem;
+    margin-bottom: 3rem;
 }
 
 img {
@@ -13,23 +29,72 @@ img {
     display: flex;
     object-fit: cover;
 }
-.product-container {
-    width: 100%;
-    height: 100%;
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-    grid-template-rows: 20% 20% 20% 20%;
-    grid-template-areas:
-    "title title title title"
-    "results img img img"
-    "results blurb blurb blurb"
-    "footer footer footer footer";
-    gap: 3px ;
-    grid-column-start: 1;
-    grid-column-end: 4;
-    grid-row-start: 1;
-    grid-row-end: 4;
-    background-color: lightcoral;
-    border: 2px solid#0067a3;
-    border-color: #0067a3;
-  }
+#product-container {
+    display: flex;
+    text-align: center;
+    justify-content: space-between;
+    margin-left: auto;
+    margin-right: auto;
+}
+#caption-container {
+    display: flex;
+    text-align: center;
+    text-decoration: 1px underline #353831;
+    justify-content: space-between;
+    margin-top: 1rem;
+    margin-left: auto;
+    margin-right: auto;
+    color: #0067a3;
+}
+
+#leftImage {
+    display: inline-block;
+    padding-left: 10px;
+}
+#left-caption {
+    display: inline-block;
+    margin: 2px;
+    padding-left: 60px;
+}
+
+#middleImage {
+    display: inline-block;
+}
+#middle-caption {
+    display: inline-block;
+    margin: 2px;
+}
+
+#rightImage {
+    display: inline-block;
+    padding-right: 10px;
+}
+#right-caption {
+    display: inline-block;
+    margin: 2px;
+    padding-right: 60px;
+}
+
+#results-list {
+    margin: 1rem;
+    display: block;
+    justify-content: center;
+    text-align: center;
+    color: #353831;
+}
+
+#results-chart-section{
+    margin: 1rem;
+    background-color: #353831;
+}
+footer {
+    display: block;
+    text-align: center;
+    justify-content: space-between;
+    margin-top: 1rem;
+    padding-bottom: 3rem;
+    margin-bottom: 10rem;
+    margin-left: auto;
+    margin-right: auto;
+    color: #0067a3;
+}

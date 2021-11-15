@@ -142,16 +142,9 @@ function handleClicks(event) {
     currentRound += 1;
     if (currentRound === maxRounds) {
         completeVote();
-        localStorage.clear();
-    // pickRandomImg();
-    // renderImages();
     } else {
         pickRandomImg();
         renderImages();
-        
-        // renderList();
-        // renderChart();
-        // removeEventListeners();
         
     }
 }
@@ -166,6 +159,7 @@ function completeVote() {
     
 
     localStorage.setItem('images', JSON.stringify(ImageObject.all));
+    // localStorage.clear();
 }
 
 function renderList() {
@@ -176,7 +170,6 @@ function renderList() {
         ulElem.append(liElem);
         liElem.textContent = `${imageInstance.imgName} - votes: ${imageInstance.votes}, shown: ${imageInstance.shown}`;
     }
-    document.getElementById('results').hidden = false;
 
 }
 
